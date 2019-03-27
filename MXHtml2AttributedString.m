@@ -7,6 +7,8 @@
 //
 
 #import "MXHtml2AttributedString.h"
+#import <CoreText/CoreText.h>
+#import <UIKit/UIKit.h>
 
 #define  MXHtml2AttributedStringNormalFontSize (15)
 
@@ -555,7 +557,7 @@
     value = [value stringByReplacingOccurrencesOfString:@"'" withString:@""];
     if ([value rangeOfString:@"#"].location==0) {
         CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-        value = [value stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
+        value = [value stringByReplacingOccurrencesOfString:@"#" withString:@""];
         NSArray *colorComponents = [self colorForHex:value];
         CGFloat components[] = { [[colorComponents objectAtIndex:0] floatValue] , [[colorComponents objectAtIndex:1] floatValue] , [[colorComponents objectAtIndex:2] floatValue] , [[colorComponents objectAtIndex:3] floatValue] };
         CGColorRef color = CGColorCreate(rgbColorSpace, components);
