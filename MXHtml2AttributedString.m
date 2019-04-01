@@ -2,7 +2,7 @@
 //  MXHtml2AttributedString.m
 //  MXOLNetwork
 //
-//  Created by idol_ios on 2018/11/1.
+//  Created by idol_ios on 2019/3/1.
 //  Copyright © 2018年 idol_ios. All rights reserved.
 //
 
@@ -462,38 +462,37 @@
     }
 }
 
-- (void)applyBoldStyleToText:(CFMutableAttributedStringRef)text atPosition:(NSUInteger)position withLength:(NSUInteger)length
+- (void)applyBoldStyleToText:(NSMutableAttributedString*)text atPosition:(NSUInteger)position withLength:(NSUInteger)length
 {
-    CFTypeRef actualFontRef = CFAttributedStringGetAttribute(text, position, kCTFontAttributeName, NULL);
-    CTFontRef boldFontRef = CTFontCreateCopyWithSymbolicTraits(actualFontRef, 0.0, NULL, kCTFontBoldTrait, kCTFontBoldTrait);
-    if (!boldFontRef) {
-        //fallback to system bold font
-        UIFont *font = [UIFont boldSystemFontOfSize:CTFontGetSize(actualFontRef)];
-        boldFontRef = CTFontCreateWithName ((__bridge CFStringRef)[font fontName], [font pointSize], NULL);
+    
+    UIFont* actualFont = [text attribute:NSFontAttributeName atIndex:position longestEffectiveRange:NULL inRange:NSMakeRange(position, 1)];
+    
+    UIFont* boldItalicFont = [UIFont boldSystemFontOfSize:[actualFont pointSize]?[actualFont pointSize]:MXHtml2AttributedStringNormalFontSize];
+    
+    if (boldItalicFont) {
+        [text setAttributes:@{NSFontAttributeName:boldItalicFont} range:NSMakeRange(position, length)];
     }
-    CFAttributedStringSetAttribute(text, CFRangeMake(position, length), kCTFontAttributeName, boldFontRef);
-    CFRelease(boldFontRef);
+    
 }
 
-- (void)applyBoldItalicStyleToText:(CFMutableAttributedStringRef)text atPosition:(NSUInteger)position withLength:(NSUInteger)length
+- (void)applyBoldItalicStyleToText:(NSMutableAttributedString*)text atPosition:(NSUInteger)position withLength:(NSUInteger)length
 {
-    CFTypeRef actualFontRef = CFAttributedStringGetAttribute(text, position, kCTFontAttributeName, NULL);
-    CTFontRef boldItalicFontRef = CTFontCreateCopyWithSymbolicTraits(actualFontRef, 0.0, NULL, kCTFontBoldTrait | kCTFontItalicTrait , kCTFontBoldTrait | kCTFontItalicTrait);
-    
-    [[UIFont alloc] ini]
     
     
-    if (!boldItalicFontRef) {
+    UIFont* actualFont = [text attribute:NSFontAttributeName atIndex:position longestEffectiveRange:NULL inRange:NSMakeRange(position, 1)];
+    
+    UIFont* boldItalicFont = [UIFont fontWithName:@"Arial-BoldItalicMT" size:[actualFont pointSize]?[actualFont pointSize]:MXHtml2AttributedStringNormalFontSize];
+    
+    
+    if (!boldItalicFont) {
         //try fallback to system boldItalic font
-        UIFont* defaultFont = [UIFont systemFontOfSize:MXHtml2AttributedStringNormalFontSize];
+        boldItalicFont = [UIFont boldSystemFontOfSize:[actualFont pointSize]?[actualFont pointSize]:MXHtml2AttributedStringNormalFontSize];
         
-        NSString *fontName = [NSString stringWithFormat:@"%@-BoldOblique", defaultFont.fontName];
-        boldItalicFontRef = CTFontCreateWithName ((__bridge CFStringRef)fontName, [defaultFont pointSize], NULL);
+        
     }
     
-    if (boldItalicFontRef) {
-        CFAttributedStringSetAttribute(text, CFRangeMake(position, length), kCTFontAttributeName, boldItalicFontRef);
-        CFRelease(boldItalicFontRef);
+    if (boldItalicFont) {
+        [text setAttributes:@{NSFontAttributeName:boldItalicFont} range:NSMakeRange(position, length)];
     }
     
 }
