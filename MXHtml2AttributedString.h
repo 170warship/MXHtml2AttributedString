@@ -2,7 +2,7 @@
 //  MXHtml2AttributedString.h
 //  MXOLNetwork
 //
-//  Created by idol_ios on 2018/11/1.
+//  Created by idol_ios on 2019/3/1.
 //  Copyright © 2018年 idol_ios. All rights reserved.
 //
 
